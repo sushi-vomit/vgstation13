@@ -134,6 +134,7 @@
 			var/new_suit_icon_state = ""
 			var/new_suit_item_state = ""
 			var/new_suit_name = ""
+			var/static/list/valid_suits = list(/obj/item/clothing/suit/storage/lawyer/bluejacket, /obj/item/clothing/suit/storage/lawyer/purpjacket, /obj/item/clothing/suit/storage/lawyer/bridgeofficer)
 			var/new_glove_icon = ""
 			var/new_glove_icon_state = ""
 			var/new_glove_item_state = ""
@@ -149,6 +150,7 @@
 			var/new_softcap_name = ""
 			var/ccoil_test = null
 			var/new_desc = "The colors are a bit dodgy."
+			
 			for(var/T in typesof(/obj/item/clothing/under))
 				var/obj/item/clothing/under/J = new T
 				if(color == J._color)
@@ -159,16 +161,17 @@
 					QDEL_NULL(J)
 					break
 				QDEL_NULL(J)
-			for(var/T in typesof(/obj/item/clothing/suit))
-				var/obj/item/clothing/suit/O = new T
-				if(color == O._color)
-					new_suit_icon = O.icon //Fixes a bug where assistant suits (which have their own icon file) would make invisible suits
-					new_suit_icon_state = O.icon_state
-					new_suit_item_state = O.item_state
-					new_suit_name = O.name
+			for(var/T in contents)
+				if(is_type_in_list(T, valid_suits))
+					var/obj/item/clothing/suit/O = new T
+					if(color == O._color)
+						new_suit_icon = O.icon
+						new_suit_icon_state = O.icon_state
+						new_suit_item_state = O.item_state
+						new_suit_name = O.name
+						QDEL_NULL(O)
+						break
 					QDEL_NULL(O)
-					break
-				QDEL_NULL(O)
 			for(var/T in typesof(/obj/item/clothing/gloves))
 				var/obj/item/clothing/gloves/G = new T
 				if(color == G._color)
